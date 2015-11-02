@@ -1,10 +1,8 @@
 import sys
 import pickle
 import codecs
-import re
-import time
 
-def test():
+def buildWordTree():
 	if len(sys.argv) < 2:
 		print ('Please input file name')
 		return
@@ -41,7 +39,9 @@ def test():
 	output = open('dict.pkl', 'wb')
 	pickle.dump(dictionary, output)
 	output.close()
+	
 
-t0 = time.clock()
-test()
-print ("base time:%s\n" % (time.clock() - t0))
+if __name__ == "__main__":
+	from timeit import Timer
+	t = Timer('buildWordTree()', 'from __main__ import buildWordTree')
+	print ('Runtime: ' + str(t.timeit(1)) + ' s')
