@@ -22,11 +22,12 @@ def query():
 			line=line.strip('\n')
 			line=line.strip('\r')
 			line=line.lower()
-			print(dictionary[str(line)])
+			if line in dictionary:
+				print(dictionary[line])
 	finally:
 		query_file.close()
 
 if __name__ == '__main__':
 	from timeit import Timer
 	t = Timer('query()', 'from __main__ import query')
-	print ('Runtime: ' + str(t.timeit(10)) + ' s')
+	print ('Runtime: ' + str(t.timeit(1)) + ' s')

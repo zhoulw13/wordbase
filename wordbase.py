@@ -2,8 +2,9 @@ import sys
 import pickle
 import codecs
 import re
+import time
 
-def buildWordTree():
+def test():
 	if len(sys.argv) < 2:
 		print ('Please input file name')
 		return
@@ -14,30 +15,33 @@ def buildWordTree():
 		return
 	full_text = ""
 	full_text = file_object.read()
+	file_object.close()
 	length = len(full_text)
 	dictionary = {}
-	position = 1
+	position = 0
 	i = 0
-	while i < length:
-		word = ''
-		while i < length and not full_text[i].isalpha():
-			i+=1
-		while i < length and full_text[i].isalpha():
-			word+=full_text[i].lower()
-			i+=1
-		i+=1
-		if word in dictionary:
-			dictionary[word]+= ','+str(position)
+	wordS = False
+	for c in full_text:
+		if not c.isalpha():
+			if wordS:
+				wordS = False
+				position+=1
+				if word not in dictionary:
+					dictionary[word] = []
+				dictionary[word].append(position)
+			continue
 		else:
-			dictionary[word] = str(position)
-
+			if not wordS:
+				wordS = True
+				word = ''
+				word = c.lower()
+			else:
+				word+=c.lower()
 
 	output = open('dict.pkl', 'wb')
 	pickle.dump(dictionary, output)
 	output.close()
-	
 
-if __name__ == "__main__":
-	from timeit import Timer
-	t = Timer('buildWordTree()', 'from __main__ import buildWordTree')
-	print ('Runtime: ' + str(t.timeit(1)) + ' s')
+t0 = time.clock()
+test()
+print ("base time:%s\n" % (time.clock() - t0))
